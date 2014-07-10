@@ -1,5 +1,5 @@
 === WP Site Mapping ===
-Contributors: benohead
+Contributors: benohead, amazingweb-gmbh
 Donate link: http://benohead.com/donate/
 Tags: html sitemap, map, menu, navigation, page sitemap, pages, posts, posts list, posts sitemap, seo, shortcode, simple sitemap, sitemap, sitemap shortcode
 Requires at least: 3.0.1
