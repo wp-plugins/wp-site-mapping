@@ -215,7 +215,7 @@ function get_html_translation_table(table, quote_style) {
     return hash_map;
 }
 (function () {
-    tinymce.create('tinymce.plugins.code', {
+    tinymce.create('tinymce.plugins.wpsm', {
         init: function (editor, url) {
 
             editor.addButton('showsitemap', {
@@ -281,5 +281,5 @@ function get_html_translation_table(table, quote_style) {
         // ... Hidden code
     });
     // Register plugin
-    tinymce.PluginManager.add('wpsm', tinymce.plugins.code);
+    tinymce.PluginManager.add('wpsm', tinymce.plugins.wpsm);
 })();

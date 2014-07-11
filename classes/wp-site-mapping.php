@@ -23,7 +23,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
         /**
          *
          */
-        const VERSION = '0.6';
+        const VERSION = '0.1.1';
         /**
          *
          */

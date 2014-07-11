@@ -3,7 +3,7 @@
 Plugin Name: WP Site Mapping
 Plugin URI:  https://wordpress.org/plugins/wp-site-mapping/
 Description: Add one or multiple HTML sitemaps to your site by using a shortcode, calling a PHP function or using a widget with this flexible and easy to use plugin.
-Version:     0.1
+Version:     0.1.1
 Author:      Henri Benoit
 Author URI:  http://benohead.com
 */
