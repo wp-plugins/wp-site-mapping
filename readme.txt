@@ -4,7 +4,7 @@ Donate link: http://benohead.com/donate/
 Tags: html sitemap, map, menu, navigation, page sitemap, pages, posts, posts list, posts sitemap, seo, shortcode, simple sitemap, sitemap, sitemap shortcode
 Requires at least: 3.0.1
 Tested up to: 3.9.1
-Stable tag: 0.1.1
+Stable tag: 0.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -95,6 +95,12 @@ Send an email to henri.benoit@gmail.com
 6. Short code editor
 
 == Changelog ==
+
+= 0.1.2 =
+
+* Links are now fine: http://domainname.com/postname/ instead of domainname.com"http://domainname.com/postname/
+
+* There was a problem with the checkbox defining whether it should show only posts matching the criteria or all except those.
 
 = 0.1.1 =
 

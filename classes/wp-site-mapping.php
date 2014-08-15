@@ -23,7 +23,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
         /**
          *
          */
-        const VERSION = '0.1.1';
+        const VERSION = '0.1.2';
         /**
          *
          */
@@ -344,6 +344,10 @@ if (!class_exists('WordPress_Site_Mapping')) {
                 'id' => 'showsitemap',
             ), $attributes));
 
+            error_log("link=".$link);
+            error_log("link=".html_entity_decode($link));
+            error_log("link=".html_entity_decode(html_entity_decode($link)));
+
             $instance = array();
             $instance['options-post-id'] = $post_id;
             $instance['options-category'] = explode(',', $cat);
@@ -353,7 +357,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
             $instance['options-user'] = explode(',', $aut);
             $instance['options-depth'] = $depth;
             $instance['options-group'] = $group;
-            $instance['options-link'] = html_entity_decode($link);
+            $instance['options-link'] = html_entity_decode(html_entity_decode($link));
             $instance['options-inc-exc'] = $exclude;
 
             return "<div id='$id' class='wpsm $class'>" . $this->get_site_map($instance) . '</div>';

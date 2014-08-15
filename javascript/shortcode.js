@@ -28,7 +28,7 @@ function htmlentities(string, quote_style, charset, double_encode) {
         hash_map["'"] = '&#039;';
     }
 
-    if ( !! double_encode || double_encode == null) {
+    if (!!double_encode || double_encode == null) {
         for (symbol in hash_map) {
             if (hash_map.hasOwnProperty(symbol)) {
                 string = string.split(symbol)
@@ -36,7 +36,7 @@ function htmlentities(string, quote_style, charset, double_encode) {
             }
         }
     } else {
-        string = string.replace(/([\s\S]*?)(&(?:#\d+|#x[\da-f]+|[a-zA-Z][\da-z]*);|$)/g, function(ignore, text, entity) {
+        string = string.replace(/([\s\S]*?)(&(?:#\d+|#x[\da-f]+|[a-zA-Z][\da-z]*);|$)/g, function (ignore, text, entity) {
             for (symbol in hash_map) {
                 if (hash_map.hasOwnProperty(symbol)) {
                     text = text.split(symbol)
@@ -253,7 +253,7 @@ function get_html_translation_table(table, quote_style) {
                                     if ($group != null) $code = $code + ' group=' + $group;
                                     var $link = jQuery('.mce-container-body iframe').contents().find('#link').val();
                                     if ($link != null) $code = $code + ' link="' + htmlentities($link) + '"';
-                                    var $exclude = jQuery('.mce-container-body iframe').contents().find('#exclude').val();
+                                    var $exclude = jQuery('.mce-container-body iframe').contents().find('#exclude').prop('checked') ? 1 : 0;
                                     if ($exclude != null) $code = $code + ' exclude=' + $exclude;
                                     var $class = jQuery('.mce-container-body iframe').contents().find('#class').val();
                                     if ($class != null && $class) $code = $code + ' class="' + $class + '"';
