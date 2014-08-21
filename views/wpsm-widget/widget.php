@@ -1,5 +1,7 @@
 <?php
 
+error_log("instance=".print_r($instance, true));
+
 $title = apply_filters('widget_title', $instance['title']);
 echo $args['before_widget'];
 if (!empty($title))
@@ -25,7 +27,9 @@ if (!empty($instance['options-post-id'])) {
 $options_category = implode(',', $instance['options-category']);
 if (!empty($options_category)) {
     $args = array('cat' => $options_category, 'post_status' => 'publish');
+    error_log("args=".print_r($args, true));
     $post_list = get_posts($args);
+    error_log("post_list=".print_r($post_list, true));
     foreach ($post_list as $post) {
         array_push($options_post_id, $post->ID);
     }
@@ -62,7 +66,10 @@ if (!empty($options_post_format)) {
 
 $options_post_id = implode(',', $options_post_id);
 
-$options_post_type = "'" . implode("', '", $instance['options-post-type']) . "'";
+$options_post_type = implode("', '", $instance['options-post-type']);
+if (!empty($options_post_type)) {
+    $options_post_type = "'" . $options_post_type . "'";
+}
 
 $options_author = implode(',', $instance['options-user']);
 
@@ -93,7 +100,7 @@ switch ($instance['options-group']) {
 switch ($group_by) {
     case '':
         $count = 0;
-        echo WordPress_Site_Mapping::get_instance()->get_post_tree_level(0, 0, $instance['options-depth'], $instance['options-inc-exc'], $options_post_id, $options_post_type, $options_author, $instance['options-link'], $order_by, '', '', $count);
+        echo WordPress_Site_Mapping::get_instance()->get_post_tree_level(0, 0, $instance['options-depth'], $instance['options-inc-exc'], $options_post_id, $options_post_type, $options_author, $instance['options-link'], $order_by, '', '', $count, $options_category, $options_tag);
         break;
     case 'author':
         $allUsers = get_users('orderby=display_name&order=ASC');
@@ -103,7 +110,7 @@ switch ($group_by) {
             foreach ($allUsers as $currentUser) {
                 if (!in_array('subscriber', $currentUser->roles)) {
                     $count = 0;
-                    $echo = WordPress_Site_Mapping::get_instance()->get_post_tree_level(0, 0, $instance['options-depth'], $instance['options-inc-exc'], $options_post_id, $options_post_type, $options_author, $instance['options-link'], $order_by, '`posts`.`post_author` = ' . $currentUser->ID, '', $count);
+                    $echo = WordPress_Site_Mapping::get_instance()->get_post_tree_level(0, 0, $instance['options-depth'], $instance['options-inc-exc'], $options_post_id, $options_post_type, $options_author, $instance['options-link'], $order_by, '`posts`.`post_author` = ' . $currentUser->ID, '', $count, $options_category, $options_tag);
                     if (!empty($echo)) {
                         ?>
                         <li class="sitemap_list_user sitemap_list_user_<?php echo get_author_posts_url($currentUser->ID); ?>">
@@ -126,8 +133,10 @@ switch ($group_by) {
         <ul class="sitemap_list_categories">
             <?php
             foreach ($categories as $category) {
+                if (!empty($options_category)>0 && in_array($category->term_id, $instance['options-category']) && $instance['options-inc-exc'] == 1) continue;
+                if (!empty($options_category)>0 && !in_array($category->term_id, $instance['options-category']) && $instance['options-inc-exc'] == 0) continue;
                 $count = 0;
-                $echo = WordPress_Site_Mapping::get_instance()->get_post_tree_level(0, 0, $instance['options-depth'], $instance['options-inc-exc'], $options_post_id, $options_post_type, $options_author, $instance['options-link'], $order_by, '`term_taxonomy`.`term_id` = ' . $category->term_id, "INNER JOIN $wpdb->term_relationships as `term_relationships` ON `posts`.ID = `term_relationships`.`object_id` INNER JOIN $wpdb->term_taxonomy as `term_taxonomy` ON `term_relationships`.`term_taxonomy_id` = `term_taxonomy`.`term_taxonomy_id`", $count);
+                $echo = WordPress_Site_Mapping::get_instance()->get_post_tree_level(0, 0, $instance['options-depth'], $instance['options-inc-exc'], $options_post_id, $options_post_type, $options_author, $instance['options-link'], $order_by, '`term_taxonomy`.`term_id` = ' . $category->term_id, "INNER JOIN $wpdb->term_relationships as `term_relationships` ON `posts`.ID = `term_relationships`.`object_id` INNER JOIN $wpdb->term_taxonomy as `term_taxonomy` ON `term_relationships`.`term_taxonomy_id` = `term_taxonomy`.`term_taxonomy_id`", $count, $options_category, $options_tag);
                 if (!empty($echo)) {
                     ?>
                     <li class="sitemap_list_category sitemap_list_category_<?php echo $category->term_id; ?>">
@@ -149,8 +158,10 @@ switch ($group_by) {
         <ul class="sitemap_list_tags">
             <?php
             foreach ($tags as $tag) {
+                if (!empty($options_tag)>0 && in_array($tag->term_id, $instance['options-tag']) && $instance['options-inc-exc'] == 1) continue;
+                if (!empty($options_tag)>0 && !in_array($tag->term_id, $instance['options-tag']) && $instance['options-inc-exc'] == 0) continue;
                 $count = 0;
-                $echo = WordPress_Site_Mapping::get_instance()->get_post_tree_level(0, 0, $instance['options-depth'], $instance['options-inc-exc'], $options_post_id, $options_post_type, $options_author, $instance['options-link'], $order_by, '`term_taxonomy`.`term_id` = ' . $tag->term_id, "INNER JOIN $wpdb->term_relationships as `term_relationships` ON `posts`.ID = `term_relationships`.`object_id` INNER JOIN $wpdb->term_taxonomy as `term_taxonomy` ON `term_relationships`.`term_taxonomy_id` = `term_taxonomy`.`term_taxonomy_id`", $count);
+                $echo = WordPress_Site_Mapping::get_instance()->get_post_tree_level(0, 0, $instance['options-depth'], $instance['options-inc-exc'], $options_post_id, $options_post_type, $options_author, $instance['options-link'], $order_by, '`term_taxonomy`.`term_id` = ' . $tag->term_id, "INNER JOIN $wpdb->term_relationships as `term_relationships` ON `posts`.ID = `term_relationships`.`object_id` INNER JOIN $wpdb->term_taxonomy as `term_taxonomy` ON `term_relationships`.`term_taxonomy_id` = `term_taxonomy`.`term_taxonomy_id`", $count, $options_category, $options_tag);
                 if (!empty($echo)) {
                     ?>
                     <li class="sitemap_list_tag sitemap_list_tag_<?php echo $tag->term_id; ?>">
@@ -165,8 +176,6 @@ switch ($group_by) {
             ?>
         </ul>
         <?php
-        break;
-    case 'tag':
         break;
 }
 

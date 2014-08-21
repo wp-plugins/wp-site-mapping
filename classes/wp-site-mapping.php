@@ -363,12 +363,12 @@ if (!class_exists('WordPress_Site_Mapping')) {
             return "<div id='$id' class='wpsm $class'>" . $this->get_site_map($instance) . '</div>';
         }
 
-        function get_post_tree_level($current_post_id, $depth, $max_depth, $exclude, $options_post_id, $options_post_type, $options_author, $link_template, $order_by, $add_where, $add_join, &$count)
+        function get_post_tree_level($current_post_id, $depth, $max_depth, $exclude, $options_post_id, $options_post_type, $options_author, $link_template, $order_by, $add_where, $add_join, &$count, $options_category, $options_tag)
         {
             $site_map = "";
             if ($depth < $max_depth) {
 
-                $my_posts = $this->get_post_descendants($current_post_id, $exclude, $options_post_id, $options_post_type, $options_author, $order_by, $add_where, $add_join);
+                $my_posts = $this->get_post_descendants($current_post_id, $exclude, $options_post_id, $options_post_type, $options_author, $order_by, $add_where, $add_join, $options_category, $options_tag);
                 $count = count($my_posts);
                 if ($count > 0) {
                     $site_map .= "<ul id='sitemap_list_$current_post_id' class='sitemap_depth_$depth'>\n";
@@ -377,7 +377,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
                         $site_map .= '<li class="post-item post-item-' . $post['ID'] . '">';
                         $site_map .= $this->get_link($link_template, $post['ID']);
                         $subcount = 0;
-                        $site_map .= $this->get_post_tree_level($post['ID'], $depth + 1, $max_depth, $exclude, $options_post_id, $options_post_type, $options_author, $link_template, $order_by, $add_where, $add_join, $subcount);
+                        $site_map .= $this->get_post_tree_level($post['ID'], $depth + 1, $max_depth, $exclude, $options_post_id, $options_post_type, $options_author, $link_template, $order_by, $add_where, $add_join, $subcount, $options_category, $options_tag);
                         $site_map .= "</li>\n";
                     }
 
@@ -423,7 +423,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
             return preg_replace($patterns, $replacements, $template);
         }
 
-        function get_post_descendants($current_post_id, $exclude, $options_post_id, $options_post_type, $options_author, $order_by, $add_where, $add_join)
+        function get_post_descendants($current_post_id, $exclude, $options_post_id, $options_post_type, $options_author, $order_by, $add_where, $add_join, $options_category, $options_tag)
         {
             global $wpdb;
 
@@ -448,19 +448,17 @@ if (!class_exists('WordPress_Site_Mapping')) {
                     $query .= "AND `posts`.`post_author` NOT IN ( $options_author ) ";
                 }
             } else {
-                $query .= "AND ( 1=0 ";
                 if (!empty($options_post_id)) {
-                    $query .= "OR `posts`.`ID` IN ( $options_post_id ) ";
+                    $query .= "AND `posts`.`ID` IN ( $options_post_id ) ";
                 }
 
                 if (!empty($options_post_type)) {
-                    $query .= "OR `posts`.`post_type` IN ( $options_post_type ) ";
+                    $query .= "AND `posts`.`post_type` IN ( $options_post_type ) ";
                 }
 
                 if (!empty($options_author)) {
-                    $query .= "OR `posts`.`post_author` IN ( $options_author ) ";
+                    $query .= "AND `posts`.`post_author` IN ( $options_author ) ";
                 }
-                $query .= ") ";
             }
 
             if (!empty($add_where)) {
@@ -473,6 +471,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
                 $query .= "ORDER BY $order_by ASC ";
             }
 
+            error_log("query=".$query);
             $my_posts = $wpdb->get_results($query, ARRAY_A);
             return $my_posts;
         }
