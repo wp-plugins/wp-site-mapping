@@ -1,6 +1,5 @@
 <?php
 
-error_log("instance=".print_r($instance, true));
 
 $title = apply_filters('widget_title', $instance['title']);
 echo $args['before_widget'];
@@ -26,10 +25,8 @@ if (!empty($instance['options-post-id'])) {
 }
 $options_category = implode(',', $instance['options-category']);
 if (!empty($options_category)) {
-    $args = array('cat' => $options_category, 'post_status' => 'publish');
-    error_log("args=".print_r($args, true));
+    $args = array('cat' => $options_category, 'post_status' => 'publish', 'posts_per_page' => -1);
     $post_list = get_posts($args);
-    error_log("post_list=".print_r($post_list, true));
     foreach ($post_list as $post) {
         array_push($options_post_id, $post->ID);
     }
@@ -37,7 +34,7 @@ if (!empty($options_category)) {
 
 $options_tag = implode(',', $instance['options-tag']);
 if (!empty($options_tag)) {
-    $args = array('tag_id' => $options_tag, 'post_status' => 'publish');
+    $args = array('tag_id' => $options_tag, 'post_status' => 'publish', 'posts_per_page' => -1);
     $post_list = get_posts($args);
     foreach ($post_list as $post) {
         array_push($options_post_id, $post->ID);
@@ -81,6 +78,7 @@ switch ($instance['options-group']) {
         $order_by = '`posts`.`post_title`';
         break;
     case 'date':
+        $group_by = 'date';
         $order_by = '`posts`.`post_date`';
         break;
     case 'author':
@@ -166,6 +164,32 @@ switch ($group_by) {
                     ?>
                     <li class="sitemap_list_tag sitemap_list_tag_<?php echo $tag->term_id; ?>">
                         <a href="<?php echo get_tag_link($tag->term_id); ?>"><?php echo esc_html($tag->name)." ($count)"; ?></a>
+                        <?php
+                        echo $echo;
+                        ?>
+                    </li><br/>
+                <?php
+                }
+            }
+            ?>
+        </ul>
+        <?php
+        break;
+    case 'date':
+        $post_dates = WordPress_Site_Mapping::get_instance()->get_post_dates();
+        ?>
+        <ul class="sitemap_list_tags">
+            <?php
+            foreach ($post_dates as $post_date) {
+                $post_date = $post_date["post_date"];
+                $count = 0;
+                $echo = WordPress_Site_Mapping::get_instance()->get_post_tree_level(0, 0, $instance['options-depth'], $instance['options-inc-exc'], $options_post_id, $options_post_type, $options_author, $instance['options-link'], $order_by, 'DATE_FORMAT(`posts`.`post_date`,"%Y-%m") = "' . $post_date .'"', "", $count, $options_category, $options_tag);
+                if (!empty($echo)) {
+                    ?>
+                    <li class="sitemap_list_tag sitemap_list_date_<?php echo $post_date; ?>">
+                        <!--a href="<?php echo get_tag_link($tag->term_id); ?>"-->
+                            <?php echo esc_html($post_date)." ($count)"; ?>
+                        <!--/a-->
                         <?php
                         echo $echo;
                         ?>

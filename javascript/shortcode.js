@@ -1,3 +1,50 @@
+//helper functions
+function getAttr(s, n) {
+    console.log(n);
+    n = new RegExp(n + '=\"([^\"]+)\"', 'g').exec(s);
+    console.log(n);
+    return n ? window.decodeURIComponent(n[1]) : '';
+};
+
+function getAttrNoDecode(s, n) {
+    console.log(n);
+    n = new RegExp(n + '=\"([^\"]+)\"', 'g').exec(s);
+    console.log(n);
+    return n ? n[1] : '';
+};
+
+function getAttrNoDecodeNoQuote(s, n) {
+    console.log(n);
+    n = new RegExp(n + '=([^ ]+)', 'g').exec(s);
+    console.log(n);
+    return n ? n[1] : '';
+};
+
+function html(cls, data, url) {
+    var placeholder = url + '/../images/sitemap_placeholder.png';
+    data = window.encodeURIComponent(data);
+
+    return '<img src="' + placeholder + '" class="mceItem ' + cls + '" ' + 'data-sh-attr="' + data + '" data-mce-resize="false" data-mce-placeholder="1" />';
+}
+
+function replaceShortcodes(content, url) {
+    //match [bs3_panel(attr)](con)[/bs3_panel]
+    return content.replace(/\[showsitemap([^\]]*)\]/g, function (all, attr) {
+        return html('wpsm_panel', attr, url);
+    });
+}
+
+function restoreShortcodes(content, url) {
+    //match any image tag with our class and replace it with the shortcode's content and attributes
+    return content.replace(/(?:<p(?: [^>]+)?>)*(<img [^>]+>)(?:<\/p>)*/g, function (match, image) {
+        var data = getAttr(image, 'data-sh-attr');
+
+        if (data) {
+            return '[showsitemap ' + data + ']';
+        }
+        return match;
+    });
+}
 function htmlentities(string, quote_style, charset, double_encode) {
     //  discuss at: http://phpjs.org/functions/htmlentities/
     // original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
@@ -224,11 +271,53 @@ function get_html_translation_table(table, quote_style) {
                 image: url + '/../images/sitemap.png'
             });
 
-            editor.addCommand('showsitemap', function () {
+            editor.addCommand('showsitemap', function (ui, v) {
+                $wpsm_post_id = v.wpsm_post_id;
+                $wpsm_cat = v.wpsm_cat;
+                $wpsm_fmt = v.wpsm_fmt;
+                $wpsm_type = v.wpsm_type;
+                $wpsm_tag = v.wpsm_tag;
+                $wpsm_aut = v.wpsm_aut;
+                $wpsm_depth = v.wpsm_depth;
+                $wpsm_group = v.wpsm_group;
+                $wpsm_link = v.wpsm_link;
+                $wpsm_exclude = v.wpsm_exclude;
+                $wpsm_class = v.wpsm_class;
+                $wpsm_id = v.wpsm_id;
+
+                $templateurl = ajaxurl + '?action=get_site_map';
+                if ($wpsm_post_id) $templateurl += "&post_id=" + window.encodeURIComponent($wpsm_post_id);
+                if ($wpsm_cat) $templateurl += "&cat=" + window.encodeURIComponent($wpsm_cat);
+                if ($wpsm_fmt) $templateurl += "&fmt=" + window.encodeURIComponent($wpsm_fmt);
+                if ($wpsm_type) $templateurl += "&type=" + window.encodeURIComponent($wpsm_type);
+                if ($wpsm_tag) $templateurl += "&tag=" + window.encodeURIComponent($wpsm_tag);
+                if ($wpsm_aut) $templateurl += "&aut=" + window.encodeURIComponent($wpsm_aut);
+                if ($wpsm_depth) $templateurl += "&depth=" + window.encodeURIComponent($wpsm_depth);
+                if ($wpsm_group) $templateurl += "&group=" + window.encodeURIComponent($wpsm_group);
+                if ($wpsm_link) $templateurl += "&link=" + window.encodeURIComponent($wpsm_link);
+                if ($wpsm_exclude) $templateurl += "&exclude=" + window.encodeURIComponent($wpsm_exclude);
+                if ($wpsm_class) $templateurl += "&class=" + window.encodeURIComponent($wpsm_class);
+                if ($wpsm_id) $templateurl += "&id=" + window.encodeURIComponent($wpsm_id);
+
+
+                /*
+                 $wpsm_post_id = window.encodeURIComponent(v.wpsm_post_id);
+                 $wpsm_cat = window.encodeURIComponent(v.wpsm_cat);
+                 $wpsm_fmt = window.encodeURIComponent(v.wpsm_fmt);
+                 $wpsm_type = window.encodeURIComponent(v.wpsm_type);
+                 $wpsm_tag = window.encodeURIComponent(v.wpsm_tag);
+                 $wpsm_aut = window.encodeURIComponent(v.wpsm_aut);
+                 $wpsm_depth = window.encodeURIComponent(v.wpsm_depth);
+                 $wpsm_group = window.encodeURIComponent(v.wpsm_group);
+                 $wpsm_link = window.encodeURIComponent(v.wpsm_link);
+                 $wpsm_exclude = window.encodeURIComponent(v.wpsm_exclude);
+                 $wpsm_class = window.encodeURIComponent(v.wpsm_class);
+                 $wpsm_id = window.encodeURIComponent(v.wpsm_id);
+                 */
                 // Open window
                 editor.windowManager.open({
                         title: 'Site Map',
-                        url: ajaxurl + '?action=get_site_map',
+                        url: $templateurl,
                         buttons: [
                             {
                                 text: "Insert",
@@ -277,9 +366,43 @@ function get_html_translation_table(table, quote_style) {
                         plugin_url: url
                     });
             });
+
+            //replace from shortcode to an placeholder image
+            editor.on('BeforeSetcontent', function (event) {
+                event.content = replaceShortcodes(event.content, url);
+            });
+
+            //replace from placeholder image to shortcode
+            editor.on('GetContent', function (event) {
+                event.content = restoreShortcodes(event.content, url);
+            });
+
+            //open popup on placeholder double click
+            editor.on('DblClick', function (e) {
+                if (e.target.nodeName == 'IMG' && e.target.className.indexOf('wpsm_panel') > -1) {
+                    var title = e.target.attributes['data-sh-attr'].value;
+                    title = window.decodeURIComponent(title);
+                    console.log(title);
+                    editor.execCommand('showsitemap', '', {
+                        wpsm_post_id: getAttrNoDecode(title, 'post_id'),
+                        wpsm_cat: getAttrNoDecode(title, 'cat'),
+                        wpsm_fmt: getAttrNoDecode(title, 'fmt'),
+                        wpsm_type: getAttrNoDecode(title, 'type'),
+                        wpsm_tag: getAttrNoDecode(title, 'tag'),
+                        wpsm_aut: getAttrNoDecode(title, 'aut'),
+                        wpsm_depth: getAttrNoDecodeNoQuote(title, 'depth'),
+                        wpsm_group: getAttrNoDecodeNoQuote(title, 'group'),
+                        wpsm_link: getAttrNoDecode(title, 'link'),
+                        wpsm_exclude: getAttrNoDecodeNoQuote(title, 'exclude'),
+                        wpsm_class: getAttrNoDecode(title, 'class'),
+                        wpsm_id: getAttrNoDecode(title, 'id')
+                    });
+                }
+            });
         }
         // ... Hidden code
     });
     // Register plugin
     tinymce.PluginManager.add('wpsm', tinymce.plugins.wpsm);
 })();
+

@@ -23,7 +23,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
         /**
          *
          */
-        const VERSION = '0.1.2';
+        const VERSION = '0.2';
         /**
          *
          */
@@ -227,17 +227,18 @@ if (!class_exists('WordPress_Site_Mapping')) {
         function get_site_map_settings()
         {
             $instance = array();
-
-            $instance['options-post-id'] = '';
-            $instance['options-category'] = array();
-            $instance['options-tag'] = array();
-            $instance['options-format'] = array();
-            $instance['options-post-type'] = array();
-            $instance['options-user'] = array();
-            $instance['options-depth'] = 10;
-            $instance['options-link'] = '<a title="%title%" href="%permalink%">%title%</a>';
-            $instance['options-inc-exc'] = 0;
-            $instance['options-group'] = 'title';
+            $instance['options-post-id'] = isset($_GET['post_id']) ? $_GET['post_id'] : '';
+            $instance['options-category'] = isset($_GET['cat']) ? explode(',', $_GET['cat']) : array();
+            $instance['options-format'] = isset($_GET['fmt']) ? explode(',', $_GET['fmt']) : array();
+            $instance['options-post-type'] = isset($_GET['type']) ? explode(',', $_GET['type']) : array();
+            $instance['options-tag'] = isset($_GET['tag']) ? explode(',', $_GET['tag']) : array();
+            $instance['options-user'] = isset($_GET['aut']) ? explode(',', $_GET['aut']) : array();
+            $instance['options-depth'] = isset($_GET['depth']) ? intval($_GET['depth']) : 10;
+            $instance['options-group'] = isset($_GET['group']) ? $_GET['group'] : 'title';
+            $instance['options-link'] = isset($_GET['link']) ? $_GET['link'] : '<a title="%title%" href="%permalink%">%title%</a>';
+            $instance['options-inc-exc'] = isset($_GET['exclude']) ? intval($_GET['exclude']) : 0;
+            $instance['class'] = isset($_GET['class']) ? $_GET['class'] : '';
+            $instance['id'] = isset($_GET['id']) ? $_GET['id'] : '';
 
             echo "<style>.widefat { border-spacing: 0; clear: both; margin: 0; width: 100%; }</style>";
 
@@ -343,10 +344,6 @@ if (!class_exists('WordPress_Site_Mapping')) {
                 'class' => '',
                 'id' => 'showsitemap',
             ), $attributes));
-
-            error_log("link=".$link);
-            error_log("link=".html_entity_decode($link));
-            error_log("link=".html_entity_decode(html_entity_decode($link)));
 
             $instance = array();
             $instance['options-post-id'] = $post_id;
@@ -471,9 +468,20 @@ if (!class_exists('WordPress_Site_Mapping')) {
                 $query .= "ORDER BY $order_by ASC ";
             }
 
-            error_log("query=".$query);
             $my_posts = $wpdb->get_results($query, ARRAY_A);
             return $my_posts;
+        }
+
+        function get_post_dates() {
+            global $wpdb;
+
+            $query = 'SELECT DISTINCT DATE_FORMAT(`posts`.`post_date`,"%Y-%m") AS post_date ';
+            $query .= "FROM $wpdb->posts as `posts` ";
+            $query .= "WHERE `posts`.`post_status` = 'publish' ";
+            $query .= "ORDER BY post_date ASC ";
+
+            $my_dates = $wpdb->get_results($query, ARRAY_A);
+            return $my_dates;
         }
 
         /**

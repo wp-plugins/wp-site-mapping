@@ -2,9 +2,9 @@
 Contributors: benohead
 Donate link: http://benohead.com/donate/
 Tags: html sitemap, map, menu, navigation, page sitemap, pages, posts, posts list, posts sitemap, seo, shortcode, simple sitemap, sitemap, sitemap shortcode
-Requires at least: 3.0.1
-Tested up to: 3.9.1
-Stable tag: 0.1.2
+Requires at least: 3.9
+Tested up to: 3.9.2
+Stable tag: 0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,10 +96,19 @@ Send an email to henri.benoit@gmail.com
 
 == Changelog ==
 
+= 0.2 =
+
+* Image placeholder for shortcode in visual editor
+* Placeholder can be double clicked to edit an existing shortcode
+* Requires WP 3.9 because of TinyMCE 4
+* Fixed missing posts
+* Fixed wrong handling of excludes
+* Filters also affect groups
+* Implemented grouping by date
+
 = 0.1.2 =
 
 * Links are now fine: http://domainname.com/postname/ instead of domainname.com"http://domainname.com/postname/
-
 * There was a problem with the checkbox defining whether it should show only posts matching the criteria or all except those.
 
 = 0.1.1 =
