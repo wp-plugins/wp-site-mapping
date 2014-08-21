@@ -1,0 +1,8 @@
+.wpsm-menu ul li {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.wpsm-menu ul, .wpsm-menu li {
+    padding-bottom: 2px;
+    padding-top: 2px;
+}
