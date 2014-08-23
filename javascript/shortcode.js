@@ -282,6 +282,7 @@ function get_html_translation_table(table, quote_style) {
                 $wpsm_group = v.wpsm_group;
                 $wpsm_link = v.wpsm_link;
                 $wpsm_exclude = v.wpsm_exclude;
+                $wpsm_grouponly = v.wpsm_grouponly;
                 $wpsm_class = v.wpsm_class;
                 $wpsm_id = v.wpsm_id;
 
@@ -296,24 +297,10 @@ function get_html_translation_table(table, quote_style) {
                 if ($wpsm_group) $templateurl += "&group=" + window.encodeURIComponent($wpsm_group);
                 if ($wpsm_link) $templateurl += "&link=" + window.encodeURIComponent($wpsm_link);
                 if ($wpsm_exclude) $templateurl += "&exclude=" + window.encodeURIComponent($wpsm_exclude);
+                if ($wpsm_grouponly) $templateurl += "&grouponly=" + window.encodeURIComponent($wpsm_grouponly);
                 if ($wpsm_class) $templateurl += "&class=" + window.encodeURIComponent($wpsm_class);
                 if ($wpsm_id) $templateurl += "&id=" + window.encodeURIComponent($wpsm_id);
 
-
-                /*
-                 $wpsm_post_id = window.encodeURIComponent(v.wpsm_post_id);
-                 $wpsm_cat = window.encodeURIComponent(v.wpsm_cat);
-                 $wpsm_fmt = window.encodeURIComponent(v.wpsm_fmt);
-                 $wpsm_type = window.encodeURIComponent(v.wpsm_type);
-                 $wpsm_tag = window.encodeURIComponent(v.wpsm_tag);
-                 $wpsm_aut = window.encodeURIComponent(v.wpsm_aut);
-                 $wpsm_depth = window.encodeURIComponent(v.wpsm_depth);
-                 $wpsm_group = window.encodeURIComponent(v.wpsm_group);
-                 $wpsm_link = window.encodeURIComponent(v.wpsm_link);
-                 $wpsm_exclude = window.encodeURIComponent(v.wpsm_exclude);
-                 $wpsm_class = window.encodeURIComponent(v.wpsm_class);
-                 $wpsm_id = window.encodeURIComponent(v.wpsm_id);
-                 */
                 // Open window
                 editor.windowManager.open({
                         title: 'Site Map',
@@ -344,6 +331,8 @@ function get_html_translation_table(table, quote_style) {
                                     if ($link != null) $code = $code + ' link="' + htmlentities($link) + '"';
                                     var $exclude = jQuery('.mce-container-body iframe').contents().find('#exclude').prop('checked') ? 1 : 0;
                                     if ($exclude != null) $code = $code + ' exclude=' + $exclude;
+                                    var $grouponly = jQuery('.mce-container-body iframe').contents().find('#grouponly').prop('checked') ? 1 : 0;
+                                    if ($grouponly != null) $code = $code + ' grouponly=' + $grouponly;
                                     var $class = jQuery('.mce-container-body iframe').contents().find('#class').val();
                                     if ($class != null && $class) $code = $code + ' class="' + $class + '"';
                                     var $id = jQuery('.mce-container-body iframe').contents().find('#id').val();
@@ -394,6 +383,7 @@ function get_html_translation_table(table, quote_style) {
                         wpsm_group: getAttrNoDecodeNoQuote(title, 'group'),
                         wpsm_link: getAttrNoDecode(title, 'link'),
                         wpsm_exclude: getAttrNoDecodeNoQuote(title, 'exclude'),
+                        wpsm_grouponly: getAttrNoDecodeNoQuote(title, 'grouponly'),
                         wpsm_class: getAttrNoDecode(title, 'class'),
                         wpsm_id: getAttrNoDecode(title, 'id')
                     });

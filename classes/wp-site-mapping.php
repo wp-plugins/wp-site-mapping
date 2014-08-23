@@ -23,7 +23,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
         /**
          *
          */
-        const VERSION = '0.2';
+        const VERSION = '0.2.1';
         /**
          *
          */
@@ -237,6 +237,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
             $instance['options-group'] = isset($_GET['group']) ? $_GET['group'] : 'title';
             $instance['options-link'] = isset($_GET['link']) ? $_GET['link'] : '<a title="%title%" href="%permalink%">%title%</a>';
             $instance['options-inc-exc'] = isset($_GET['exclude']) ? intval($_GET['exclude']) : 0;
+            $instance['options-group-only'] = isset($_GET['grouponly']) ? intval($_GET['grouponly']) : 0;
             $instance['class'] = isset($_GET['class']) ? $_GET['class'] : '';
             $instance['id'] = isset($_GET['id']) ? $_GET['id'] : '';
 
@@ -263,6 +264,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
                 'options-group' => 'group',
                 'options-link' => 'link',
                 'options-inc-exc' => 'exclude',
+                'options-group-only' => 'grouponly',
                 'class' => 'class',
                 'id' => 'id',
             );
@@ -286,6 +288,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
                 'options-group' => 'group',
                 'options-link' => 'link',
                 'options-inc-exc' => 'exclude',
+                'options-group-only' => 'grouponly',
                 'class' => 'class',
                 'id' => 'id',
             );
@@ -341,6 +344,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
                 'group' => 'title',
                 'link' => '<a title="%title%" href="%permalink%">%title%</a>',
                 'exclude' => 0,
+                'grouponly' => 0,
                 'class' => '',
                 'id' => 'showsitemap',
             ), $attributes));
@@ -356,25 +360,27 @@ if (!class_exists('WordPress_Site_Mapping')) {
             $instance['options-group'] = $group;
             $instance['options-link'] = html_entity_decode(html_entity_decode($link));
             $instance['options-inc-exc'] = $exclude;
+            $instance['options-group-only'] = $grouponly;
 
             return "<div id='$id' class='wpsm $class'>" . $this->get_site_map($instance) . '</div>';
         }
 
-        function get_post_tree_level($current_post_id, $depth, $max_depth, $exclude, $options_post_id, $options_post_type, $options_author, $link_template, $order_by, $add_where, $add_join, &$count, $options_category, $options_tag)
+        function get_post_tree_level($current_post_id, $depth, $max_depth, $exclude, $options_post_id, $options_post_type, $options_author, $link_template, $order_by, $add_where, $add_join, &$count, $options_category, $options_tag, $grouponly)
         {
             $site_map = "";
             if ($depth < $max_depth) {
 
                 $my_posts = $this->get_post_descendants($current_post_id, $exclude, $options_post_id, $options_post_type, $options_author, $order_by, $add_where, $add_join, $options_category, $options_tag);
                 $count = count($my_posts);
-                if ($count > 0) {
+                error_log("grouponly=$grouponly");
+                if ($count > 0 && $grouponly != 1) {
                     $site_map .= "<ul id='sitemap_list_$current_post_id' class='sitemap_depth_$depth'>\n";
 
                     foreach ($my_posts as $post) {
                         $site_map .= '<li class="post-item post-item-' . $post['ID'] . '">';
                         $site_map .= $this->get_link($link_template, $post['ID']);
                         $subcount = 0;
-                        $site_map .= $this->get_post_tree_level($post['ID'], $depth + 1, $max_depth, $exclude, $options_post_id, $options_post_type, $options_author, $link_template, $order_by, $add_where, $add_join, $subcount, $options_category, $options_tag);
+                        $site_map .= $this->get_post_tree_level($post['ID'], $depth + 1, $max_depth, $exclude, $options_post_id, $options_post_type, $options_author, $link_template, $order_by, $add_where, $add_join, $subcount, $options_category, $options_tag, $grouponly);
                         $site_map .= "</li>\n";
                     }
 

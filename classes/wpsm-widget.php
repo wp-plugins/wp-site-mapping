@@ -38,6 +38,7 @@ class WPSM_Widget extends WP_Widget
             'options-group' => '',
             'options-link' => '<a title="%title%" href="%permalink%">%title%</a>',
             'options-inc-exc' => 0,
+            'options-group-only' => 0,
         ));
         echo self::render_template('wpsm-settings/widget-settings-fields.php', array('widget' => $this, 'instance' => $instance, 'in_editor' => false), 'always');
     }
@@ -95,6 +96,7 @@ class WPSM_Widget extends WP_Widget
         $instance['options-group'] = $new_instance['options-group'];
         $instance['options-link'] = (!empty($new_instance['options-link'])) ? $new_instance['options-link'] : '<a title="%title%" href="%permalink%">%title%</a>';
         $instance['options-inc-exc'] = $new_instance['options-inc-exc'];
+        $instance['options-group-only'] = $new_instance['options-group-only'];
         $instance['options-post-id'] = (!empty($new_instance['options-post-id'])) ? strip_tags($new_instance['options-post-id']) : '';
         $instance['options-category'] = (isset($new_instance['options-category'])) ? $new_instance['options-category'] : array();
         $instance['options-tag'] = (isset($new_instance['options-tag'])) ? $new_instance['options-tag'] : array();

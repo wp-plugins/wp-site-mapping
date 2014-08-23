@@ -4,7 +4,7 @@ Donate link: http://benohead.com/donate/
 Tags: html sitemap, map, menu, navigation, page sitemap, pages, posts, posts list, posts sitemap, seo, shortcode, simple sitemap, sitemap, sitemap shortcode
 Requires at least: 3.9
 Tested up to: 3.9.2
-Stable tag: 0.2
+Stable tag: 0.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,6 +23,8 @@ Of course you can also add the shortcode yourself using the following syntax:
 * depth: defines how many levels of posts will be shown e.g. depth=1 means that only parent posts will be shown, depth=2 means that parent posts as well as one level of children posts will be displayed.
 
 * exclude=1 means that all posts/pages will be displayed in the sitemap except the ones matching one of the defined criteria. If not present, only the posts/pages matching at least one of the defined criteria will be displayed.
+
+* grouponly=1 means that only the group names (e.g. category, month, tag) will be diplayed with the post count, but not the posts themselves
 
 * post_id: List of post IDs to include or exclude e.g. post_id="32,9-11,33" will include/exclude all posts with the IDs 9, 10, 11, 32 and 33.
 
@@ -95,6 +97,10 @@ Send an email to henri.benoit@gmail.com
 6. Short code editor
 
 == Changelog ==
+
+= 0.2.1 =
+
+* Added option for only showing group headers (with count)
 
 = 0.2 =
 

@@ -41,6 +41,13 @@
            value="1" <?php checked(1, $instance['options-inc-exc']) ?>/>
 </p>
 <p>
+    <label
+        for="<?php echo $widget->get_field_id('options-group-only'); ?>"><?php _e('Show only group headers:'); ?></label>
+    <input type="checkbox" name="<?php echo $widget->get_field_name('options-group-only'); ?>"
+           id="<?php echo $widget->get_field_id('options-group-only'); ?>"
+           value="1" <?php checked(1, $instance['options-group-only']) ?>/>
+</p>
+<p>
     <label for="<?php echo $widget->get_field_id('options-post-id'); ?>"><?php _e('Post IDs:'); ?></label>
     <input class="widefat" type="text" name="<?php echo $widget->get_field_name('options-post-id'); ?>"
            id="<?php echo $widget->get_field_id('options-post-id'); ?>"
