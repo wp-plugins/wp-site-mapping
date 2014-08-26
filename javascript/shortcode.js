@@ -272,34 +272,35 @@ function get_html_translation_table(table, quote_style) {
             });
 
             editor.addCommand('showsitemap', function (ui, v) {
-                $wpsm_post_id = v.wpsm_post_id;
-                $wpsm_cat = v.wpsm_cat;
-                $wpsm_fmt = v.wpsm_fmt;
-                $wpsm_type = v.wpsm_type;
-                $wpsm_tag = v.wpsm_tag;
-                $wpsm_aut = v.wpsm_aut;
-                $wpsm_depth = v.wpsm_depth;
-                $wpsm_group = v.wpsm_group;
-                $wpsm_link = v.wpsm_link;
-                $wpsm_exclude = v.wpsm_exclude;
-                $wpsm_grouponly = v.wpsm_grouponly;
-                $wpsm_class = v.wpsm_class;
-                $wpsm_id = v.wpsm_id;
-
                 $templateurl = ajaxurl + '?action=get_site_map';
-                if ($wpsm_post_id) $templateurl += "&post_id=" + window.encodeURIComponent($wpsm_post_id);
-                if ($wpsm_cat) $templateurl += "&cat=" + window.encodeURIComponent($wpsm_cat);
-                if ($wpsm_fmt) $templateurl += "&fmt=" + window.encodeURIComponent($wpsm_fmt);
-                if ($wpsm_type) $templateurl += "&type=" + window.encodeURIComponent($wpsm_type);
-                if ($wpsm_tag) $templateurl += "&tag=" + window.encodeURIComponent($wpsm_tag);
-                if ($wpsm_aut) $templateurl += "&aut=" + window.encodeURIComponent($wpsm_aut);
-                if ($wpsm_depth) $templateurl += "&depth=" + window.encodeURIComponent($wpsm_depth);
-                if ($wpsm_group) $templateurl += "&group=" + window.encodeURIComponent($wpsm_group);
-                if ($wpsm_link) $templateurl += "&link=" + window.encodeURIComponent($wpsm_link);
-                if ($wpsm_exclude) $templateurl += "&exclude=" + window.encodeURIComponent($wpsm_exclude);
-                if ($wpsm_grouponly) $templateurl += "&grouponly=" + window.encodeURIComponent($wpsm_grouponly);
-                if ($wpsm_class) $templateurl += "&class=" + window.encodeURIComponent($wpsm_class);
-                if ($wpsm_id) $templateurl += "&id=" + window.encodeURIComponent($wpsm_id);
+                if (typeof v !== 'undefined') {
+                    $wpsm_post_id = v.wpsm_post_id;
+                    $wpsm_cat = v.wpsm_cat;
+                    $wpsm_fmt = v.wpsm_fmt;
+                    $wpsm_type = v.wpsm_type;
+                    $wpsm_tag = v.wpsm_tag;
+                    $wpsm_aut = v.wpsm_aut;
+                    $wpsm_depth = v.wpsm_depth;
+                    $wpsm_group = v.wpsm_group;
+                    $wpsm_link = v.wpsm_link;
+                    $wpsm_exclude = v.wpsm_exclude;
+                    $wpsm_grouponly = v.wpsm_grouponly;
+                    $wpsm_class = v.wpsm_class;
+                    $wpsm_id = v.wpsm_id;
+                    if ($wpsm_post_id) $templateurl += "&post_id=" + window.encodeURIComponent($wpsm_post_id);
+                    if ($wpsm_cat) $templateurl += "&cat=" + window.encodeURIComponent($wpsm_cat);
+                    if ($wpsm_fmt) $templateurl += "&fmt=" + window.encodeURIComponent($wpsm_fmt);
+                    if ($wpsm_type) $templateurl += "&type=" + window.encodeURIComponent($wpsm_type);
+                    if ($wpsm_tag) $templateurl += "&tag=" + window.encodeURIComponent($wpsm_tag);
+                    if ($wpsm_aut) $templateurl += "&aut=" + window.encodeURIComponent($wpsm_aut);
+                    if ($wpsm_depth) $templateurl += "&depth=" + window.encodeURIComponent($wpsm_depth);
+                    if ($wpsm_group) $templateurl += "&group=" + window.encodeURIComponent($wpsm_group);
+                    if ($wpsm_link) $templateurl += "&link=" + window.encodeURIComponent($wpsm_link);
+                    if ($wpsm_exclude) $templateurl += "&exclude=" + window.encodeURIComponent($wpsm_exclude);
+                    if ($wpsm_grouponly) $templateurl += "&grouponly=" + window.encodeURIComponent($wpsm_grouponly);
+                    if ($wpsm_class) $templateurl += "&class=" + window.encodeURIComponent($wpsm_class);
+                    if ($wpsm_id) $templateurl += "&id=" + window.encodeURIComponent($wpsm_id);
+                }
 
                 // Open window
                 editor.windowManager.open({

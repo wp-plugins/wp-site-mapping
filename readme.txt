@@ -4,7 +4,7 @@ Donate link: http://benohead.com/donate/
 Tags: html sitemap, map, menu, navigation, page sitemap, pages, posts, posts list, posts sitemap, seo, shortcode, simple sitemap, sitemap, sitemap shortcode
 Requires at least: 3.9
 Tested up to: 3.9.2
-Stable tag: 0.2.1
+Stable tag: 0.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,6 +97,10 @@ Send an email to henri.benoit@gmail.com
 6. Short code editor
 
 == Changelog ==
+
+= 0.2.2 =
+
+* Fixed button in visual editor
 
 = 0.2.1 =
 
