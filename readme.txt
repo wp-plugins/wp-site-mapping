@@ -3,7 +3,7 @@ Contributors: benohead
 Donate link: http://benohead.com/donate/
 Tags: html sitemap, map, menu, navigation, page sitemap, pages, posts, posts list, posts sitemap, seo, shortcode, simple sitemap, sitemap, sitemap shortcode
 Requires at least: 3.9
-Tested up to: 3.9.2
+Tested up to: 4.1
 Stable tag: 0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
