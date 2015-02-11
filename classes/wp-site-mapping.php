@@ -23,7 +23,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
         /**
          *
          */
-        const VERSION = '0.2.2';
+        const VERSION = '0.3';
         /**
          *
          */
@@ -235,6 +235,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
             $instance['options-user'] = isset($_GET['aut']) ? explode(',', $_GET['aut']) : array();
             $instance['options-depth'] = isset($_GET['depth']) ? intval($_GET['depth']) : 10;
             $instance['options-group'] = isset($_GET['group']) ? $_GET['group'] : 'title';
+            $instance['options-reverse'] = isset($_GET['reverse']) ? intval($_GET['reverse']) : 0;
             $instance['options-link'] = isset($_GET['link']) ? $_GET['link'] : '<a title="%title%" href="%permalink%">%title%</a>';
             $instance['options-inc-exc'] = isset($_GET['exclude']) ? intval($_GET['exclude']) : 0;
             $instance['options-group-only'] = isset($_GET['grouponly']) ? intval($_GET['grouponly']) : 0;
@@ -262,6 +263,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
                 'options-user' => 'aut',
                 'options-depth' => 'depth',
                 'options-group' => 'group',
+                'options-reverse' => 'reverse',
                 'options-link' => 'link',
                 'options-inc-exc' => 'exclude',
                 'options-group-only' => 'grouponly',
@@ -285,6 +287,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
                 'options-post-type' => 'type',
                 'options-user' => 'aut',
                 'options-depth' => 'depth',
+                'options-reverse' => 'reverse',
                 'options-group' => 'group',
                 'options-link' => 'link',
                 'options-inc-exc' => 'exclude',
@@ -342,6 +345,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
                 'aut' => '',
                 'depth' => 10,
                 'group' => 'title',
+                'reverse' => 0,
                 'link' => '<a title="%title%" href="%permalink%">%title%</a>',
                 'exclude' => 0,
                 'grouponly' => 0,
@@ -358,6 +362,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
             $instance['options-user'] = explode(',', $aut);
             $instance['options-depth'] = $depth;
             $instance['options-group'] = $group;
+            $instance['options-reverse'] = $reverse;
             $instance['options-link'] = html_entity_decode(html_entity_decode($link));
             $instance['options-inc-exc'] = $exclude;
             $instance['options-group-only'] = $grouponly;
@@ -372,7 +377,6 @@ if (!class_exists('WordPress_Site_Mapping')) {
 
                 $my_posts = $this->get_post_descendants($current_post_id, $exclude, $options_post_id, $options_post_type, $options_author, $order_by, $add_where, $add_join, $options_category, $options_tag);
                 $count = count($my_posts);
-                error_log("grouponly=$grouponly");
                 if ($count > 0 && $grouponly != 1) {
                     $site_map .= "<ul id='sitemap_list_$current_post_id' class='sitemap_depth_$depth'>\n";
 
@@ -471,7 +475,7 @@ if (!class_exists('WordPress_Site_Mapping')) {
             $query .= "GROUP BY `posts`.`ID` ";
 
             if (!empty($order_by)) {
-                $query .= "ORDER BY $order_by ASC ";
+                $query .= "ORDER BY $order_by";
             }
 
             $my_posts = $wpdb->get_results($query, ARRAY_A);

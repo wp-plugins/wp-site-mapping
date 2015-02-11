@@ -36,6 +36,7 @@ class WPSM_Widget extends WP_Widget
             'options-user' => array(),
             'options-depth' => 10,
             'options-group' => '',
+            'options-reverse' => 0,
             'options-link' => '<a title="%title%" href="%permalink%">%title%</a>',
             'options-inc-exc' => 0,
             'options-group-only' => 0,
@@ -94,6 +95,7 @@ class WPSM_Widget extends WP_Widget
         $instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
         $instance['options-depth'] = $new_instance['options-depth'];
         $instance['options-group'] = $new_instance['options-group'];
+        $instance['options-reverse'] = $new_instance['options-reverse'];
         $instance['options-link'] = (!empty($new_instance['options-link'])) ? $new_instance['options-link'] : '<a title="%title%" href="%permalink%">%title%</a>';
         $instance['options-inc-exc'] = $new_instance['options-inc-exc'];
         $instance['options-group-only'] = $new_instance['options-group-only'];

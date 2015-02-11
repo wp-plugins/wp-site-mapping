@@ -35,6 +35,13 @@
 </p>
 <p>
     <label
+        for="<?php echo $widget->get_field_id('options-reverse'); ?>"><?php _e('Reverse order:'); ?></label>
+    <input type="checkbox" name="<?php echo $widget->get_field_name('options-reverse'); ?>"
+           id="<?php echo $widget->get_field_id('options-reverse'); ?>"
+           value="1" <?php checked(1, $instance['options-reverse']) ?>/>
+</p>
+<p>
+    <label
         for="<?php echo $widget->get_field_id('options-inc-exc'); ?>"><?php _e('Include all except matching:'); ?></label>
     <input type="checkbox" name="<?php echo $widget->get_field_name('options-inc-exc'); ?>"
            id="<?php echo $widget->get_field_id('options-inc-exc'); ?>"

@@ -1,6 +1,4 @@
 <?php
-error_log("instance=".print_r($instance, true));
-
 $title = apply_filters('widget_title', $instance['title']);
 echo $args['before_widget'];
 if (!empty($title))
@@ -95,13 +93,21 @@ switch ($instance['options-group']) {
         break;
 }
 
+if (isset($instance['options-reverse']) && $instance['options-reverse'] == 1) {
+    $order_by = $order_by . " DESC";
+}
+
 switch ($group_by) {
     case '':
         $count = 0;
         echo WordPress_Site_Mapping::get_instance()->get_post_tree_level(0, 0, $instance['options-depth'], $instance['options-inc-exc'], $options_post_id, $options_post_type, $options_author, $instance['options-link'], $order_by, '', '', $count, $options_category, $options_tag, $instance['options-group-only']);
         break;
     case 'author':
-        $allUsers = get_users('orderby=display_name&order=ASC');
+        $order="ASC";
+        if (isset($instance['options-reverse']) && $instance['options-reverse'] == 1) {
+            $order="DESC";
+        }
+        $allUsers = get_users('orderby=display_name&order='.$order);
         ?>
         <ul class="sitemap_list_users">
             <?php
@@ -127,6 +133,9 @@ switch ($group_by) {
         break;
     case 'category':
         $categories = get_terms('category');
+        if (isset($instance['options-reverse']) && $instance['options-reverse'] == 1) {
+            $categories = array_reverse($categories);
+        }
         ?>
         <ul class="sitemap_list_categories">
             <?php
@@ -152,6 +161,9 @@ switch ($group_by) {
         break;
     case 'tag':
         $tags = get_terms('post_tag');
+        if (isset($instance['options-reverse']) && $instance['options-reverse'] == 1) {
+            $tags = array_reverse($tags);
+        }
         ?>
         <ul class="sitemap_list_tags">
             <?php
@@ -177,6 +189,9 @@ switch ($group_by) {
         break;
     case 'date':
         $post_dates = WordPress_Site_Mapping::get_instance()->get_post_dates();
+        if (isset($instance['options-reverse']) && $instance['options-reverse'] == 1) {
+            $post_dates = array_reverse($post_dates);
+        }
         ?>
         <ul class="sitemap_list_tags">
             <?php

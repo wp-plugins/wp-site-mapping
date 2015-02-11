@@ -283,6 +283,7 @@ function get_html_translation_table(table, quote_style) {
                     $wpsm_depth = v.wpsm_depth;
                     $wpsm_group = v.wpsm_group;
                     $wpsm_link = v.wpsm_link;
+                    $wpsm_reverse = v.wpsm_reverse;
                     $wpsm_exclude = v.wpsm_exclude;
                     $wpsm_grouponly = v.wpsm_grouponly;
                     $wpsm_class = v.wpsm_class;
@@ -297,6 +298,7 @@ function get_html_translation_table(table, quote_style) {
                     if ($wpsm_group) $templateurl += "&group=" + window.encodeURIComponent($wpsm_group);
                     if ($wpsm_link) $templateurl += "&link=" + window.encodeURIComponent($wpsm_link);
                     if ($wpsm_exclude) $templateurl += "&exclude=" + window.encodeURIComponent($wpsm_exclude);
+                    if ($wpsm_reverse) $templateurl += "&reverse=" + window.encodeURIComponent($wpsm_reverse);
                     if ($wpsm_grouponly) $templateurl += "&grouponly=" + window.encodeURIComponent($wpsm_grouponly);
                     if ($wpsm_class) $templateurl += "&class=" + window.encodeURIComponent($wpsm_class);
                     if ($wpsm_id) $templateurl += "&id=" + window.encodeURIComponent($wpsm_id);
@@ -332,6 +334,8 @@ function get_html_translation_table(table, quote_style) {
                                     if ($link != null) $code = $code + ' link="' + htmlentities($link) + '"';
                                     var $exclude = jQuery('.mce-container-body iframe').contents().find('#exclude').prop('checked') ? 1 : 0;
                                     if ($exclude != null) $code = $code + ' exclude=' + $exclude;
+                                    var $reverse = jQuery('.mce-container-body iframe').contents().find('#reverse').prop('checked') ? 1 : 0;
+                                    if ($reverse != null) $code = $code + ' reverse=' + $reverse;
                                     var $grouponly = jQuery('.mce-container-body iframe').contents().find('#grouponly').prop('checked') ? 1 : 0;
                                     if ($grouponly != null) $code = $code + ' grouponly=' + $grouponly;
                                     var $class = jQuery('.mce-container-body iframe').contents().find('#class').val();
@@ -383,6 +387,7 @@ function get_html_translation_table(table, quote_style) {
                         wpsm_depth: getAttrNoDecodeNoQuote(title, 'depth'),
                         wpsm_group: getAttrNoDecodeNoQuote(title, 'group'),
                         wpsm_link: getAttrNoDecode(title, 'link'),
+                        wpsm_reverse: getAttrNoDecodeNoQuote(title, 'reverse'),
                         wpsm_exclude: getAttrNoDecodeNoQuote(title, 'exclude'),
                         wpsm_grouponly: getAttrNoDecodeNoQuote(title, 'grouponly'),
                         wpsm_class: getAttrNoDecode(title, 'class'),
